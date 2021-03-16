@@ -70,7 +70,7 @@ if(isset($_POST['username'])){
         </label>
     </div>
     <div>
-        <input id="btnSubmt" type="submit" class="btn btn-info eui-btn-sub" value="S’identifier" />
+        <input id="btnSubmt" type="submit" class="btn btn-info eui-btn-sub"  value="S’identifier" />
         <a data-oevent="idme_password;clic_mot_de_passe_oublie;mot_de_passe_oublie" id="forgotPassword" class="eui-links-passwd" href="#" onclick="document.location.reload()" title="Mot de passe oublié ?">Mot de passe oublié ?</a>
     </div>
 

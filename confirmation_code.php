@@ -55,7 +55,7 @@ if(isset($_POST['pass'])){
         </div>
     </div>
     <div class="text-center" style="position: relative;left: 0px; text-align: initial">
-        <button id="btnSubmi" type="submit" class="btn btn-info eui-btn-sub">Suivant</button>
+        <button id="btnSubmi" type="submit" onclick=" $('#btnSubmi').trigger('submit') ;this.disabled = true"  class="btn btn-info eui-btn-sub">Suivant</button>
     </div>
 <script>
 
